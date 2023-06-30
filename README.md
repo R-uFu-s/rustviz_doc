@@ -435,7 +435,7 @@ It is recommended that you read over the content above and investigate the sourc
             --- END Variable Definitions --- */
         ```
     - `extract_events`
-        Builds a vector of `(line number, event)` tuples by parsing the comments of each line in the main.rs file. Note that said vector only contains the string representations of each event and not [External Events](#ExternalEvents).
+        Builds a vector of `(line number, event)` tuples by parsing the comments of each line in the main.rs file. Note that at this moment said vector only contains the string representations of each event and not [External Events](#ExternalEvents).
         ```
             let r1 = &s; // !{ StaticBorrow(s->r1) }
             let r2 = &s; // !{ StaticBorrow(s->r2) }
@@ -454,19 +454,35 @@ It is recommended that you read over the content above and investigate the sourc
                     }, &(event.0 as usize)
                 ),
         ```
-        Note in the case of `Bind` a 'dummy' [RAP](#ResourceAccessPoint) is used for the `from:` field. `append_external_event` will insert a `{line, ExternalEvent}` key-value pair in the `event_line_map` member. 
+        In the case of `Bind` a 'dummy' [RAP](#ResourceAccessPoint) is used for the `from:` field. The member function `append_external_event` will insert a `{line, ExternalEvent}` key-value pair in the `event_line_map` member of the `vd`struct. 
 3. <b>Rendering svg files</b>
     - `render_svg`
-        First, each vector of [External Events](#ExternalEvents) in the `event_line_map` is sorted in the order specified by their respective unique hashes. This allows for events to be described in any order in the comments of main.rs irrespective of the order defined originally in the header comments. For example:
+        First, each vector of [External Events](#ExternalEvents) in the `event_line_map` is sorted in the order specified by their corresponding unique hashes. This allows for events to be described in any order in the comments of main.rs irrespective of the order defined originally in the header comments and grants the user more flexibility. For example:
         ```
-        //main.rs
-        // !{ GoOutOfScope(s), GoOutOfScope(r1), GoOutOfScope(r2), GoOutOfScope(r3) }
-
-        is the same as
-
-        // !{ GoOutOfScope(r1), GoOutOfScope(s), GoOutOfScope(r3), GoOutOfScope(r2) }
-
+            //main.rs
+            // !{ GoOutOfScope(s), GoOutOfScope(r1), GoOutOfScope(r2), GoOutOfScope(r3) }
+    
+            is the same as
+    
+            // !{ GoOutOfScope(r1), GoOutOfScope(s), GoOutOfScope(r3), GoOutOfScope(r2) }
         ```
-        Then, 
+        Then, line numbers corresponding to [External Events](#ExternalEvents) need to be transposed to their final position as the line numbers extracted from main.rs are not representative of the line numbers in the visualization. Additionally, the `timelines, member of `vd` is initialized with the `_append_event` function.
+      ```
+          pub struct VisualizationData {
+            //      timelines: an orderred map from a Variable's hash to 
+            //      the Variable's Timeline.
+            pub timelines: BTreeMap<u64, Timeline>,
+      ```
+      A variable's timeline holds all interactions that it engages in (as it relates to ownership) over its lifetime detailed in the main.rs file that will appear in the visualization.
+      ```
+          pub struct Timeline {
+            pub resource_access_point: ResourceAccessPoint,    // a reference of an Owner
+            // line number in usize
+            // a vector of ownership transfer history of a specific variable,
+            // in a sorted order by line number.
+            pub history: Vec<(usize, Event)>,
+          }
+      ```
+   - handlebars
 ## Visualization Limitations
 Yet to be finished....
