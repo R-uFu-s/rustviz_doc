@@ -481,7 +481,7 @@ It is recommended that you read over the content above and investigate the sourc
             pub history: Vec<(usize, Event)>,
           }
       ```
-   - Handlebars
+   - `Handlebars`
         At this point all the necessary data has been extracted and processed from the main.rs file and is ready to be interpolated into SVG elements. Here is an example of an SVG element (a hoverable dot) and its corresponding line of code:
         ```
             <circle cx="70" cy="115" r="5" data-hash="1" class="tooltip-trigger" data-tooltip-text="&lt;span style=&quot;font-family: 'Source Code Pro', Consolas, 'Ubuntu Mono', Menlo, 'DejaVu Sans Mono', monospace, monospace !important;&quot;&gt;s&lt;/span&gt; acquires ownership of a resource"/>
@@ -489,7 +489,7 @@ It is recommended that you read over the content above and investigate the sourc
             let mut s = String::from("hello");
 
         ```
-        Two svg files are rendered for the final visualization: the code panel (the text) `vis_code.svg` and the timeline panel (the interactive state diagram) `vis_timeline.svg`. Templates for each component of the visualization: dots, arrows, vertical lines, etc are registered using Handlebars and are utilized to dynamically render visualizations. Here is the dot template that is used to generate the SVG element in the example above:
+        Two svg files are rendered for the final visualization: the code panel (the text) `vis_code.svg` and the timeline panel (the interactive state diagram) `vis_timeline.svg`. Templates for each component of the visualization: dots, arrows, vertical lines, etc are registered using `Handlebars` and are utilized to dynamically render visualizations. Here is the dot template that is used to generate the SVG element in the example above:
         ```
             let dot_template = 
             "        <circle cx=\"{{dot_x}}\" cy=\"{{dot_y}}\" r=\"5\" data-hash=\"{{hash}}\"     class=\"tooltip-trigger\"data-tooltip-text=\"{{title}}\"/>\n";
