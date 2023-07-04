@@ -508,4 +508,4 @@ It is recommended that you read over the content above and investigate the sourc
                     registry.render("vertical_line_template", &data).unwrap()
             },
         ```
-        Once each component of the visualization is rendered, contents of both the code panel and timeline panel are written to `vis_code.svg` and `vis_timeline.svg` respectively which at that point are ready to be integrated into the rustviz-tutorial mdbook. 
+        Once each component of the visualization is rendered, contents of both the code panel and timeline panel are written to `vis_code.svg` and `vis_timeline.svg` respectively, which at that point are ready to be integrated into the rustviz-tutorial mdbook. 
